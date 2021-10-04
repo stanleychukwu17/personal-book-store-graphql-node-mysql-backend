@@ -1,13 +1,11 @@
-const dbPool = require('./db_connection'); // the mysql database connection pool
+const mysql = require('mysql2/promise');
 
 const getAllBooks = async (bookId = 0) => {
-    const rows = dbPool.query('SELECT * FROM books').then(rws => {
-        // console.log(rws);
-    });
+    const arguments = [];
+    const connection = await mysql.createConnection({host:'localhost', user: 'root', password: 'password', database: 'dev_bookstore'});
+    const [rows, fields] = await connection.execute('SELECT * FROM books', arguments);
 
-    return [
-        {'id':'name', 'name':'The boy, kelly handsome pon this one', authorId:1, category:'highlkife'}
-    ]
+    return rows;
 }
 
 module.exports = {getAllBooks}
