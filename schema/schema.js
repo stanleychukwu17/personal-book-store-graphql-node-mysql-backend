@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 const {GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema} = graphql;
-const {getAllBooks} = require('../parser/functions')
+const {getAllBooks, getAllAuthors} = require('../parser/functions')
 
 
 const BookType = new GraphQLObjectType({
@@ -13,7 +13,7 @@ const BookType = new GraphQLObjectType({
         author : {
             type: AuthorType,
             resolve (parent, args) {
-                return authors.find(ech => ech.id == parent.authorId);
+                return getAllAuthors(parent.authorId)
             }
         }
     })
@@ -28,7 +28,7 @@ const AuthorType = new GraphQLObjectType({
         'books': {
             type: new GraphQLList(BookType),
             resolve (parent, args) {
-                return books.filter(ech => ech.authorId == parent.id);
+                return getAllBooks(0, parent.id);
             }
         }
     })
@@ -40,24 +40,23 @@ const RootQuery = new GraphQLObjectType({
         book : {
             type: BookType,
             args: {id: {'type': GraphQLString}},
-            resolve (parent, args) {
-                return books.find(ech => ech.id == args.id);
-            }
+            resolve (parent, args) { return getAllBooks(args.id); }
         },
 
         author: {
             type: AuthorType,
             args: {id: {'type': GraphQLString}},
-            resolve (parent, args) {
-                return authors.find(ech => ech.id == args.id);
-            }
+            resolve (parent, args) { return getAllAuthors(args.id) }
         },
 
         allBooks: {
             type: new GraphQLList(BookType),
-            resolve (parent, args) {
-                return getAllBooks()
-            }
+            resolve (parent, args) { return getAllBooks() }
+        },
+
+        allAuthors: {
+            type: new GraphQLList(AuthorType),
+            resolve (parent, args) { return getAllAuthors() }
         }
     }
 })
