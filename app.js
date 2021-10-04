@@ -1,5 +1,6 @@
 require('dotenv').config(); // sets up your dotenv environment
 const express = require('express');
+const mysql = require('mysql2/promise');
 
 const app = express();
 
