@@ -1,19 +1,7 @@
 const graphql = require('graphql');
 const {GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema} = graphql;
+const {getAllBooks} = require('../parser/functions')
 
-const books = [
-    {'id':'1', 'authorId':'1', name:'chidinma', 'category':'Soul music'},
-    {'id':'2', 'authorId':'1', name:'The titans', 'category':'Soul music'},
-    {'id':'3', 'authorId':'3', name:'John F kennedy', 'category':'Soul music'},
-    {'id':'4', 'authorId':'4', name:'Timeline of love', 'category':'Soul music'}
-]
-
-const authors = [
-    {'id':'1', name:'Stanley chukwu', 'age':55},
-    {'id':'2', name:'Uche chukwu', 'age':24},
-    {'id':'3', name:'Nonso chukwu', 'age':33},
-    {'id':'4', name:'Chinaza chukwu', 'age':70}
-]
 
 const BookType = new GraphQLObjectType({
     name: 'Book',
@@ -68,7 +56,7 @@ const RootQuery = new GraphQLObjectType({
         allBooks: {
             type: new GraphQLList(BookType),
             resolve (parent, args) {
-                return books
+                return getAllBooks()
             }
         }
     }
